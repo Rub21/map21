@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>#TACHITO PUEBLO LIBRE</title>
+        <link type='text/css' href='css/mapbox.css' rel='stylesheet' />
+
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+
+        <link  type='text/css' href='css/style.css' rel='stylesheet' />
+        <!--[if IE 8]>
+        <link  type='text/css' href='css/ie8.css' rel='stylesheet' />
+        <![endif]-->
+    </head>
+    <body>
+        <div id='masthead'>
+            <!--  <div id='header'>
+  
+                  <h3>MAPEANDO LA BASURA DE MI DISTRITO - PUEBLO LIBRE</h3>
+              </div>-->
+
+           
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="navbar-inner">
+                    <a href="#" class="brand">Peruano Activo</a>
+                    <div class="container">
+                        <ul class="nav" style="float: right">
+                            <li class="active">
+                                <a href="#">Inicio</a>
+                            </li>
+                            <li>
+                                <a href="#estadisticas" class="pull-right" data-toggle="modal">Estadisticas</a>
+                            </li>                     
+
+                            <li>
+                                <a href="#sobrenos" class="pull-right" data-toggle="modal" >Sobre Nosotros</a>
+                            </li>
+                            <li>
+                                <a href="#contactenos"  class="pull-right" data-toggle="modal" >Contactenos</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div id="map" class="loading"></div>
+        <div id="block_text_desription">
+
+            <p>
+                Identifique los puntos  de incidentes delicuenciales, 
+            </p>
+
+            <h5>#TACHITO</h5>
+            <p>
+                Identifique los puntos  de insidentes delincuanciales
+            </p>
+            <p>
+                <a class="button"  href="#" onClick="location.href = '../users/login_users.jsp'">AGREGA UN PUNTO</a>
+            </p>
+            <p>
+                Si estas en la calle y ves basura, usa tu teléfono móvil! Toma una foto y envíala por twitter con la palabra #tachito y tu ubicación.
+            </p>
+
+            <div id="tachitocontainer">
+                <img src="http://i597.photobucket.com/albums/tt59/jclemav/tachito3.png" border="0" alt="Tachito">
+            </div>
+
+
+
+
+            <a  href="#" onClick="location.href = '../users/newuser.jsp'">Registrarse</a>
+            <a href="#"  onClick="location.href = '../users/login_users.jsp'">Iniciar Session</a>
+        </div>
+
+        <div align="center" id="middle_content" class="content">
+
+            <div class="contributor">fff</div>
+        </div>
+
+        <div id="popover" class="modal container hide fade" tabindex="-1">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h5>
+                    Punto registrado a las: <spam class="hora"></spam>  Del Dia: <span class="fecha"></span>
+
+                </h5>
+                <p>
+                    Del Usuario :
+                <spam class="usuario"></spam>
+                </p>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="span10">
+                        <p class="description"></p>
+                    </div>
+                    <div class="span10" style="text-align: center">
+                        <img class="img" alt="" style="max-width: 800px" ></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cerrar</button>
+
+            </div>
+        </div>
+
+        <a href="#popover"  class="click"  data-toggle="modal"></a>
+
+        <!--EStadisticas-->
+
+        <div id="estadisticas" class="modal container hide fade" tabindex="-1">
+            <div class="modal-header">   
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Puntos Registrados</h3>
+                <p class="well">Los cifras mostradas reflejan la cantida de insidentes registrados,
+                    estos puede ser seleccionados diariamente o mensualmente
+                </p> 
+            </div>
+
+            <div class="modal-body" >
+
+                <div class=" content">
+                    <div class="row-fluid">
+
+                        <div class="span2">
+
+                            Numero  Total de Puntos  Registrados:
+                            <h1 id="num_puntos"></h1>
+
+                        </div>
+                        <div class="span10">
+                            <div id="draw_pen_colum"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="content">
+                    <div class="draw">
+                        <div id="draw_p_pen"></div>
+                    </div>
+
+                </div>
+
+
+
+                <!-- <div class="draw">
+                     <div id="draw_p_ate"></div>
+                 </div>-->
+
+
+            </div>
+
+
+        </div>
+
+
+        <!--End Estadisticas-->
+
+
+
+        <!--Sobre Nosotros-->
+
+        <div id="sobrenos" class="modal container hide fade" tabindex="-1">
+            <div class="modal-header">   
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <p>
+                    Somos una grupos de Estudiantes egresados que venimos  implementando una  
+                    aplicacion que pueda haciedno uso de maps , para mejorar hacer participe a todo ciudadanno en el Peru, mediante su
+                    registro de puntos criticos que por juicio son donde los gobiernos distritales, provinciales , regionales, y nacional deberis de intervenir
+                </p>       
+            </div>
+            <div class="modal-body" >
+            </div>
+        </div>
+
+
+        <!--End Sobre Nosotros-->
+
+
+        <!--contactenos-->
+
+        <div id="contactenos" class="modal container hide fade" tabindex="-1">
+            <div class="modal-header">   
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+            </div>
+            <div class="modal-body" >
+            </div>
+        </div>
+
+
+        <!--End Sobre contactenos-->
+
+        <div class="content_menu">
+
+            <div class="well-small"><h5>Registro por dia</h5></div>
+
+            <div class="accordion" id="accordion_moth">            
+            </div>
+
+        </div>
+
+
+        <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
+        <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <script src="http://underscorejs.org/underscore-min.js"></script>
+        <script src="js/get_data.js"></script>
+        <script src="js/menu.js"></script>
+        <script src="js/app.js"></script>
+
+
+
+    </body>
+</html>

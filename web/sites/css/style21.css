@@ -1,0 +1,294 @@
+/******************style fonts*/
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Open Sans Light'), local('OpenSans-Light'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Open Sans Bold'), local('OpenSans-Bold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+
+
+body {
+    font-family: 'Open Sans',sans-serif;
+}
+
+/*************************************
+Map
+**************************************/
+#map {
+    background-color: #000;
+    height: 615px;
+    position:absolute; 
+    top:45px; 
+    width:100%; 
+}
+
+
+.loading {
+    position: relative;
+}
+
+.loading:after {
+    background: url(../images/ajax-loader.gif) no-repeat;
+    content: "Cargando...";
+    color: #666;
+    left: 50%;  
+    height: 16px;
+    line-height: 16px;
+    margin-top: -8px;
+    margin-left: -40px;
+    position: absolute;
+    font-size: 12px;
+    top: 50%; 
+    text-indent: 26px;
+    width: 80px;
+}
+
+#map.loading:after {
+    background-color: #333;
+    background-color: rgba(0,0,0,0.75);
+    background-image: url(../images/ajax-loader-rev.gif);
+    color: #fff;
+    padding: 20px;
+    background-position: 20px 50%;
+    border-radius: 10px;
+    z-index: 999999;
+    position: absolute;
+}
+
+/************************Markers****/
+.mmg {
+    width: 15px;
+    height: 15px;
+    left: -7.5px;
+    top: -7.5px;
+    z-index: 3;
+    position: absolute;
+    cursor: pointer;
+    pointer-events: all;
+}
+.mmg-first { background: url(../images/work.png) no-repeat left bottom; }
+.mmg-second { background: url(../images/play.png) no-repeat left bottom; }
+
+
+.marker-popup {
+    min-width: 200px;
+}
+.popover-geo-title{
+    color: #064361;
+    margin: 1px;
+    margin-top: 3px;
+}
+
+.popover-geo-fecha{
+    color: #000;
+    margin: 1px;
+    font-size: 10px;
+}
+
+.marker-popup .btn {
+    position: absolute;
+    top: 5px;
+    right: 3px;
+}
+
+.de_conocimiento{
+    font-weight: bold;
+    color: #d14;
+}
+
+
+
+/** estadisticas*/
+
+.stadistic_content{
+    /*background: #005580;*/
+    border-top: 5px solid #3B5998;
+    border-bottom: 2px solid #ccc;
+    /*border-left: 2px solid #ccc;
+    border-right: 2px solid #ccc;*/
+    height: auto;
+    margin-top: 660px;
+    /*height: 100px;*/
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+
+/**end estadisticas*/
+
+/***********Descripcion **/
+.content_Descripcion{
+    background: none repeat scroll 0 0 rgba(13, 13, 13, 0.898);
+    /*background-color: #F5F5F5;*/
+    position: absolute;
+    top: 136px;
+    left:    0px;
+    float: left;
+    height: 522px;  
+    width: 250px;
+    /* -moz-box-shadow: 0 0 3px 3px #ddd;
+     -webkit-box-shadow: 0 0 3px 3px#ddd;
+     box-shadow: 0 0 3px 3px #ddd;   */
+    font-size:14px;
+    z-index: 12; 
+ color: #fff;
+}
+.content_Descripcion p{
+    text-align: justify;
+    line-height: 20px;
+}
+
+.content_Descripcion , .content_menu{
+    border: 1px solid #999999;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease-out 0s;
+}
+
+/************end descripcion*/
+/***********Menu dia*/
+.content_menu{
+    background-color: #fff;
+    /*background: none repeat scroll 0 0 rgba(13, 13, 13, 0.898);*/
+    position: absolute;
+    top: 136px;
+    right:   0px;
+    float: left;
+    height: 522px; 
+    width: 250px;
+    /* -moz-box-shadow: 0 0 3px 3px #ddd;
+     -webkit-box-shadow: 0 0 3px 3px#ddd;
+     box-shadow: 0 0 3px 3px #ddd;   */
+    font-size:14px;
+    z-index: 12; 
+
+}
+
+.content_menu ul.dropdown-menu{
+    display: block;
+    position: relative;
+    top: 0px;
+    border-color: #fff;
+    width: 250px;
+    /*background: none repeat scroll 0 0 rgba(13, 13, 13, 0.898);*/
+}
+
+.content_menu .accordion-inner{
+    padding: 9px 2px;
+}
+.content_menu .accordion {
+    margin-bottom: 20px;
+    margin-top: 46px;
+}
+
+.acordio-toggle{
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+}
+#masthead .navbar{
+    height: 45px;
+}
+
+
+
+/***********End Menu dia*/
+/* tag ****************************/
+.tag {
+    background: none repeat scroll 0 0 #FFFFFF;
+    /* border-left: 1px solid #999999;*/
+    /*background: none repeat scroll 0 0 rgba(13, 13, 13, 0.898);*/
+    border-bottom:  1px solid #999999;
+
+    top: 138px;
+    color: #A3ABAC;
+    display: block;
+    font-size: 11px;
+    right:  2px;
+    position: absolute;
+    width: 215px;
+    z-index: 99;
+}
+.tag a {
+    color: #7F8A8C;
+}
+.tag a.slide-toggle {
+    background: url("../images/sprite.png") no-repeat scroll -84px 15px white;
+    border: 1px solid #999999;
+    top: -1px;
+    height: 40px;
+    right:  208px;
+    position: absolute;
+    text-indent: -999em;
+    width: 40px;
+    z-index: 999;
+    
+}
+.tag a {
+    color: #999999;
+    text-decoration: none;
+}
+
+.tag span {
+    display: block;
+    padding: 10px;
+    margin-left: 25px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.tag a.slide-toggle:hover{
+    background-color: #444;
+    border-color: #444;
+
+}
+
+.accordion-toggle{
+
+}
+/************************ End tag/
+
+/****************Estadisticas************//***************stadistic*********************/
+#num_puntos{
+    color: #E55C3C;
+}
+
+.draw{
+    width:auto;
+    height:auto;
+}
+.modal-body .draw .well{
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 2px;
+    padding:2px;
+    text-align: center;
+    width:auto;
+    background: #fff;
+}
+
+#draw_month{
+    width: 500px;
+    height: 200px;
+}
+/*
+
+.stadistic_content h1{
+    font-size: 100px;
+    line-height: 1;
+}*/

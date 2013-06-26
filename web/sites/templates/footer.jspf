@@ -1,0 +1,12 @@
+
+<link rel="stylesheet" href="css/style_footer.css" />
+<link rel="stylesheet" href="../sites/css/style_footer.css" />
+
+<div id="footer">
+    <div class="well-small" style="text-align: center">
+      <!--  <h6 style="color: #fff">Creado y Desarrollado por: System21 - 2013</h6>-->
+        <a href="http://blog.">blog</a> &nbsp; 
+        <a href="http://www.facebook.com/">facebook</a> &nbsp; 
+        <a href="http://twitter.com/">twiter</a> &nbsp;
+    </div>
+</div>
