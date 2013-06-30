@@ -1,0 +1,495 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.9
+-- Dumped by pg_dump version 9.1.9
+-- Started on 2013-06-29 19:09:39 PET
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 169 (class 3079 OID 11680)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1957 (class 0 OID 0)
+-- Dependencies: 169
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+--
+-- TOC entry 181 (class 1255 OID 440980)
+-- Dependencies: 5 523
+-- Name: insert_punto_agujero(character varying, character varying, character varying, character varying, character varying, character varying, text, text, character varying, character varying, character varying, boolean, numeric, numeric); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION insert_punto_agujero(idpunto character varying, tipo character varying, idusuario character varying, usuario character varying, calle character varying, fecha character varying, descripcion text, direc_ref text, de_conocimiento character varying, img character varying, reg_de character varying, estado boolean, lat numeric, lon numeric) RETURNS character
+    LANGUAGE plpgsql
+    AS $$
+DECLARE        
+BEGIN
+		INSERT INTO puntos_agujero(idpunto, tipo, idusuario, usuario, calle, fecha, descripcion, 
+			    direc_ref, de_conocimiento, img, reg_de, estado, lat, lon)
+		    VALUES ( idpunto, tipo, idusuario, usuario, calle, fecha, descripcion, 
+			    direc_ref, de_conocimiento, img, reg_de, estado, lat, lon);
+
+	RETURN 'Insert a Punto';
+	
+END;
+$$;
+
+
+ALTER FUNCTION public.insert_punto_agujero(idpunto character varying, tipo character varying, idusuario character varying, usuario character varying, calle character varying, fecha character varying, descripcion text, direc_ref text, de_conocimiento character varying, img character varying, reg_de character varying, estado boolean, lat numeric, lon numeric) OWNER TO postgres;
+
+--
+-- TOC entry 185 (class 1255 OID 440965)
+-- Dependencies: 523 5
+-- Name: insert_punto_delincuencia(character varying, character varying, character varying, character varying, character varying, character varying, text, text, character varying, character varying, character varying, boolean, numeric, numeric); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION insert_punto_delincuencia(idpunto character varying, tipo character varying, idusuario character varying, usuario character varying, fecha character varying, hora character varying, descripcion text, direc_ref text, de_conocimiento character varying, img character varying, reg_de character varying, estado boolean, lat numeric, lon numeric) RETURNS character
+    LANGUAGE plpgsql
+    AS $$
+DECLARE 
+		_idu character varying;
+		_idusuario TEXT;       
+		
+BEGIN	
+	_idu=idusuario;
+	_idusuario=(SELECT  u.idusuario  FROM usuario as u  where u.idusuario = _idu);			
+			
+	IF (_idusuario  IS NULL) THEN		
+		INSERT INTO usuario(idusuario, correo, nombre, usuario, contrasenia, estado, rol)
+		VALUES (idusuario, '', '', usuario,  idusuario , false, 2);
+		
+		INSERT INTO puntos_delincuencia(
+                   idpunto, tipo, idusuario, usuario, fecha, hora, descripcion, 
+                   direc_ref, de_conocimiento, img, reg_de, estado, lat, lon)
+	        VALUES (idpunto, tipo, idusuario, usuario, fecha, hora, descripcion, 
+                    direc_ref, de_conocimiento, img, reg_de, estado, lat, lon);
+
+	
+	ELSE	
+	
+	INSERT INTO puntos_delincuencia(
+            idpunto, tipo, idusuario, usuario, fecha, hora, descripcion, 
+            direc_ref, de_conocimiento, img, reg_de, estado, lat, lon)
+	VALUES (idpunto, tipo, idusuario, usuario, fecha, hora, descripcion, 
+            direc_ref, de_conocimiento, img, reg_de, estado, lat, lon);
+        END IF;
+           
+	RETURN 'Insert a Punto';
+	
+END;
+$$;
+
+
+ALTER FUNCTION public.insert_punto_delincuencia(idpunto character varying, tipo character varying, idusuario character varying, usuario character varying, fecha character varying, hora character varying, descripcion text, direc_ref text, de_conocimiento character varying, img character varying, reg_de character varying, estado boolean, lat numeric, lon numeric) OWNER TO postgres;
+
+--
+-- TOC entry 182 (class 1255 OID 440995)
+-- Dependencies: 523 5
+-- Name: insert_punto_desecho(character varying, character varying, character varying, character varying, character varying, text, text, character varying, character varying, character varying, boolean, numeric, numeric); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION insert_punto_desecho(idpunto character varying, idusuario character varying, usuario character varying, fecha character varying, hora character varying, descripcion text, direc_ref text, de_conocimiento character varying, img character varying, reg_de character varying, estado boolean, lat numeric, lon numeric) RETURNS character
+    LANGUAGE plpgsql
+    AS $$
+DECLARE        
+BEGIN
+		INSERT INTO puntos_desecho(idpunto, idusuario, usuario, fecha, hora, descripcion, direc_ref, 
+            de_conocimiento, img, reg_de, estado, lat, lon)
+             VALUES ( idpunto, idusuario, usuario, fecha, hora, descripcion, direc_ref, 
+            de_conocimiento, img, reg_de, estado, lat, lon);
+	RETURN 'Insert a Punto';
+	
+END;
+$$;
+
+
+ALTER FUNCTION public.insert_punto_desecho(idpunto character varying, idusuario character varying, usuario character varying, fecha character varying, hora character varying, descripcion text, direc_ref text, de_conocimiento character varying, img character varying, reg_de character varying, estado boolean, lat numeric, lon numeric) OWNER TO postgres;
+
+--
+-- TOC entry 184 (class 1255 OID 441021)
+-- Dependencies: 5 523
+-- Name: num_puntos_agujero(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION num_puntos_agujero(_fecha character varying) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	_count INTEGER;	
+	BEGIN
+		_count=(select count(*) as day   FROM puntos_agujero where fecha=_fecha and estado=true);	
+	RETURN _count;
+	END;
+$$;
+
+
+ALTER FUNCTION public.num_puntos_agujero(_fecha character varying) OWNER TO postgres;
+
+--
+-- TOC entry 183 (class 1255 OID 440996)
+-- Dependencies: 5 523
+-- Name: num_puntos_delincuencia(character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION num_puntos_delincuencia(_fecha character varying) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	_count INTEGER;	
+	BEGIN
+		_count=(select count(*) as day   FROM puntos_delincuencia where fecha=_fecha and estado=true);	
+	RETURN _count;
+	END;
+$$;
+
+
+ALTER FUNCTION public.num_puntos_delincuencia(_fecha character varying) OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 163 (class 1259 OID 440966)
+-- Dependencies: 1929 5
+-- Name: puntos_agujero; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE puntos_agujero (
+    idpunto character varying(40) NOT NULL,
+    tipo character varying(60),
+    idusuario character varying(20) NOT NULL,
+    usuario character varying(60),
+    calle character varying(60),
+    fecha character varying(15),
+    descripcion text,
+    direc_ref text,
+    de_conocimiento character varying(5),
+    img character varying(100),
+    reg_de character varying(2),
+    estado boolean,
+    lat numeric,
+    lon numeric,
+    fecharegistro timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.puntos_agujero OWNER TO postgres;
+
+--
+-- TOC entry 162 (class 1259 OID 440950)
+-- Dependencies: 1928 5
+-- Name: puntos_delincuencia; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE puntos_delincuencia (
+    idpunto character varying(40) NOT NULL,
+    tipo character varying(60),
+    idusuario character varying(20) NOT NULL,
+    usuario character varying(60),
+    fecha character varying(15),
+    hora character varying(15),
+    descripcion text,
+    direc_ref text,
+    de_conocimiento character varying(5),
+    img character varying(100),
+    reg_de character varying(2),
+    estado boolean,
+    lat numeric,
+    lon numeric,
+    fecharegistro timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.puntos_delincuencia OWNER TO postgres;
+
+--
+-- TOC entry 164 (class 1259 OID 440981)
+-- Dependencies: 1930 5
+-- Name: puntos_desecho; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE puntos_desecho (
+    idpunto character varying(40) NOT NULL,
+    idusuario character varying(20) NOT NULL,
+    usuario character varying(60),
+    fecha character varying(15),
+    hora character varying(15),
+    descripcion text,
+    direc_ref text,
+    de_conocimiento character varying(5),
+    img character varying(100),
+    reg_de character varying(2),
+    estado boolean,
+    lat numeric,
+    lon numeric,
+    fecharegistro timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.puntos_desecho OWNER TO postgres;
+
+--
+-- TOC entry 167 (class 1259 OID 441022)
+-- Dependencies: 1925 5
+-- Name: select_date_day_agujero; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW select_date_day_agujero AS
+    SELECT puntos_agujero.fecha AS day, num_puntos_agujero(puntos_agujero.fecha) AS num_puntos FROM puntos_agujero GROUP BY puntos_agujero.fecha ORDER BY to_date((puntos_agujero.fecha)::text, 'dd/mm/yyyy'::text);
+
+
+ALTER TABLE public.select_date_day_agujero OWNER TO postgres;
+
+--
+-- TOC entry 165 (class 1259 OID 441013)
+-- Dependencies: 1923 5
+-- Name: select_date_day_delincuencia; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW select_date_day_delincuencia AS
+    SELECT puntos_delincuencia.fecha AS day, num_puntos_delincuencia(puntos_delincuencia.fecha) AS num_puntos FROM puntos_delincuencia GROUP BY puntos_delincuencia.fecha ORDER BY to_date((puntos_delincuencia.fecha)::text, 'dd/mm/yyyy'::text);
+
+
+ALTER TABLE public.select_date_day_delincuencia OWNER TO postgres;
+
+--
+-- TOC entry 168 (class 1259 OID 441026)
+-- Dependencies: 1926 5
+-- Name: select_date_month_agujero; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW select_date_month_agujero AS
+    SELECT "substring"((select_date_day_agujero.day)::text, 4, 7) AS month, sum(select_date_day_agujero.num_puntos) AS num_puntos FROM select_date_day_agujero GROUP BY "substring"((select_date_day_agujero.day)::text, 4, 7) ORDER BY "substring"((select_date_day_agujero.day)::text, 4, 7);
+
+
+ALTER TABLE public.select_date_month_agujero OWNER TO postgres;
+
+--
+-- TOC entry 166 (class 1259 OID 441017)
+-- Dependencies: 1924 5
+-- Name: select_date_month_delincuencia; Type: VIEW; Schema: public; Owner: postgres
+--
+
+CREATE VIEW select_date_month_delincuencia AS
+    SELECT "substring"((select_date_day_delincuencia.day)::text, 4, 7) AS month, sum(select_date_day_delincuencia.num_puntos) AS num_puntos FROM select_date_day_delincuencia GROUP BY "substring"((select_date_day_delincuencia.day)::text, 4, 7) ORDER BY "substring"((select_date_day_delincuencia.day)::text, 4, 7);
+
+
+ALTER TABLE public.select_date_month_delincuencia OWNER TO postgres;
+
+--
+-- TOC entry 161 (class 1259 OID 440930)
+-- Dependencies: 1927 5
+-- Name: usuario; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE usuario (
+    idusuario character varying(20) NOT NULL,
+    correo character varying(100) NOT NULL,
+    nombre character varying(200),
+    usuario character varying(20) NOT NULL,
+    contrasenia text NOT NULL,
+    estado boolean NOT NULL,
+    rol integer,
+    fecharegistro timestamp without time zone DEFAULT now()
+);
+
+
+ALTER TABLE public.usuario OWNER TO postgres;
+
+--
+-- TOC entry 1948 (class 0 OID 440966)
+-- Dependencies: 163 1950
+-- Data for Name: puntos_agujero; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY puntos_agujero (idpunto, tipo, idusuario, usuario, calle, fecha, descripcion, direc_ref, de_conocimiento, img, reg_de, estado, lat, lon, fecharegistro) FROM stdin;
+1wa	Agujero	1u	Rub21	Principal	01/06/2013	Agujeron en la Calle	ref	No	null	w	t	-4.47786	-74.70703	2013-06-01 10:56:40.028391
+2wa	Agujero	1u	Rub21	Principal	01/06/2013	Agujeron en la Calle	ref	No	null	w	t	-4.786	-74.703	2013-06-01 10:57:17.70002
+4w	Obras Mal Echas	1u	Rub21	Obras Mal Echas	01/06/2013	Huecos en La 	ggg	Nose	tradicion130601123751.jpg	w	t	-8.32021	-75.14648	2013-06-01 12:37:51.306509
+4wa	Calle Deteriorada	1u	Rub21	Huecos	22/05/2013	ggggggggggggggggggggggggg	gggggg	Si	marisqueriamanglaresdetumbes130601124147.jpg	w	t	-5.7909	-78.2666	2013-06-01 12:41:47.782233
+5wa	Calle Deteriorada	1u	Rub21	DesmonteCalle s	01/06/2013	Calles deterioradas		Si	marisqueriamanglaresdetumbes130601124459.jpg	w	t	-7.15723	-78.51693	2013-06-01 12:44:59.574102
+344534474173857792t	Agujero	713303390	ediqp8	Calle Principal	11/06/2013	#agujero... pistas malogradas..... http://t.co/wmc46J0z9o	null	No	http://pbs.twimg.com/media/BMgIR2KCQAAkEwO.jpg	t	t	-13.1546208	-74.2165949	2013-06-11 14:25:57.30706
+344536731741192192t	Agujero	713303390	ediqp8	Calle Principal	11/06/2013	#agujero....nuevo..test aqui calles ...malogradas....	null	No	null	t	t	-13.1546208	-74.2165949	2013-06-11 14:29:11.142794
+344537770871631873t	Agujero	713303390	ediqp8	Calle Principal	11/06/2013	#agujero negro..en jr asamblea....	null	No	null	t	t	-13.15533	-74.2158155	2013-06-11 14:33:16.087346
+6wa	Calle Deteriorada	1u	Rub21	DesmonteCalle s	08/06/2013	Calles deteriorda aqui		No	recreoamancaes130611143653.jpg	w	t	-12.10378	-75.83862	2013-06-11 14:36:53.763269
+7wa	Desmontes	1u	Rub21	Calle Residencial	06/06/2013	eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee	eeeeeee	No	marisqueriamanglaresdetumbes130611144022.jpg	w	t	-10.96276	-74.44336	2013-06-11 14:40:22.222522
+\.
+
+
+--
+-- TOC entry 1947 (class 0 OID 440950)
+-- Dependencies: 162 1950
+-- Data for Name: puntos_delincuencia; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY puntos_delincuencia (idpunto, tipo, idusuario, usuario, fecha, hora, descripcion, direc_ref, de_conocimiento, img, reg_de, estado, lat, lon, fecharegistro) FROM stdin;
+2w	Robo	1u	Rub21	01/06/2013	3:35 AM	asalto en las calle	ref	No	null	w	t	-4.47786	-74.70703	2013-06-01 10:48:11.258026
+1w	Robo	1u	Rub21	01/06/2013	3:35 AM	asalto en las calle	ref	No	null	w	t	-4.47786	-74.70703	2013-06-01 10:48:21.187775
+4w	Secuestro	1u	Anonimo	01/06/2013	1:20 AM	robo a una botica	ttttttttt	Nose	marisqueriamanglaresdetumbes130602105657.jpg	w	t	-15.48786	-70.1344	2013-06-02 10:56:57.279157
+5w	Violencia Familiar	1u	Anonimo	02/06/2013	1:45 AM	maltrato familiar de una hijo a su padre mayor		No	pollerialacasona130602105904.jpg	w	t	-6.09686	-77.12402	2013-06-02 10:59:04.015281
+341876738759995393t	Otros	713303390	ediqp8	04/06/2013	11:19 AM	#inseguridad......pelea en la calle	null	No	null	t	t	-13.1553554	-74.2157821	2013-06-04 23:20:19.278999
+342134635863613441t	Robo	713303390	ediqp8	05/06/2013	4:23 AM	#inseguridad...Robo de un camioneta http://t.co/Vsm6rheX6r	null	No	http://pbs.twimg.com/media/BL-Bo3yCIAECxbn.jpg	t	t	-13.1546226	-74.2165896	2013-06-04 23:24:05.600931
+343364383109431297t	Otros	713303390	ediqp8	08/06/2013	1:50 PM	#inseguridad....hoy sabado intento de robo en.....test http://t.co/f66ptgf5uw	null	No	http://pbs.twimg.com/media/BMPgFlRCQAAcbhe.jpg	t	t	-13.1553324	-74.2158037	2013-06-08 10:28:38.132283
+3w	Agresion	1u	Anonimo	08/06/2013	1:00 AM	Homicidiosss		No	pizzeriaypastas130608114234.jpg	w	t	-12.55456	-74.92676	2013-06-08 11:42:34.021787
+6w	Robo	1u	Rub21	01/06/2013	1:25 AM	gamarttra lkima	aaa	No	null	w	t	-12.0823	-76.24512	2013-06-08 12:25:55.38181
+7w	Intento de Robo	1u	Anonimo	08/05/2013	1:00 PM	Un robot es una entidad virtual o mecÃ¡nica artificial. En 	rrrrrr	No	lacasona130608143052.jpg	w	t	-12.86536	-75.1355	2013-06-08 14:30:52.791788
+8w	Intento de Robo	1u	Rub21	16/06/2013	1:35 AM	Me robaron .. Maldicion		No	EcatepecdeMorelos-before130625221831.png	w	t	-12.00664	-77.08252	2013-06-25 22:18:31.490611
+9w	Accidente	1u	Anonimo	27/06/2013	1:35 AM	tttttttttttttttttt		No	2012-07-0100130628162610.39.22.jpg	w	t	-13.16043	-74.22583	2013-06-28 16:26:10.485856
+\.
+
+
+--
+-- TOC entry 1949 (class 0 OID 440981)
+-- Dependencies: 164 1950
+-- Data for Name: puntos_desecho; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY puntos_desecho (idpunto, idusuario, usuario, fecha, hora, descripcion, direc_ref, de_conocimiento, img, reg_de, estado, lat, lon, fecharegistro) FROM stdin;
+1wdes	1u	Rub21	01/06/2013	100:00AM	Basuras en la Calle	ref	No	null	w	t	-4.786	-74.703	2013-06-01 11:04:44.208103
+2w	1u	Rub21	01/06/2013	1:35 AM	Desechos	sssss	Si	pollerialacasona130601130558.jpg	w	t	-14.39212	-69.78516	2013-06-01 13:05:58.019743
+\.
+
+
+--
+-- TOC entry 1946 (class 0 OID 440930)
+-- Dependencies: 161 1950
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY usuario (idusuario, correo, nombre, usuario, contrasenia, estado, rol, fecharegistro) FROM stdin;
+1u	rub2106@gmail.com	Ruben Lopez Mendoza	Rub21	1234	t	1	2013-06-01 10:43:00.692974
+2u	rub21_06@hotmail.com	ruben Lopez	ru21	1234	t	2	2013-06-03 16:17:48.019466
+3u	ruben@mapbox.com	Ruben Lopez	r2106	ILCKZ	f	2	2013-06-03 21:30:02.02893
+4u	peruanoactivo@outlook.com	er	er21	YKQHQ	f	2	2013-06-03 21:57:05.340117
+713303390			ediqp8	1234	t	2	2013-06-04 23:16:02.42163
+6u	elvishromero@gmail.com	Elvis	Elvis	NEDJZ	f	2	2013-06-25 22:13:46.072197
+\.
+
+
+--
+-- TOC entry 1940 (class 2606 OID 440974)
+-- Dependencies: 163 163 1951
+-- Name: puntos_agujero_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY puntos_agujero
+    ADD CONSTRAINT puntos_agujero_pkey PRIMARY KEY (idpunto);
+
+
+--
+-- TOC entry 1938 (class 2606 OID 440958)
+-- Dependencies: 162 162 1951
+-- Name: puntos_delincuencia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY puntos_delincuencia
+    ADD CONSTRAINT puntos_delincuencia_pkey PRIMARY KEY (idpunto);
+
+
+--
+-- TOC entry 1942 (class 2606 OID 440989)
+-- Dependencies: 164 164 1951
+-- Name: puntos_desecho_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY puntos_desecho
+    ADD CONSTRAINT puntos_desecho_pkey PRIMARY KEY (idpunto);
+
+
+--
+-- TOC entry 1932 (class 2606 OID 440940)
+-- Dependencies: 161 161 1951
+-- Name: usuario_correo_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT usuario_correo_key UNIQUE (correo);
+
+
+--
+-- TOC entry 1934 (class 2606 OID 440938)
+-- Dependencies: 161 161 1951
+-- Name: usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT usuario_pkey PRIMARY KEY (idusuario);
+
+
+--
+-- TOC entry 1936 (class 2606 OID 440942)
+-- Dependencies: 161 161 1951
+-- Name: usuario_usuario_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY usuario
+    ADD CONSTRAINT usuario_usuario_key UNIQUE (usuario);
+
+
+--
+-- TOC entry 1944 (class 2606 OID 440975)
+-- Dependencies: 163 1933 161 1951
+-- Name: fk_puntos_agujero_geometry; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY puntos_agujero
+    ADD CONSTRAINT fk_puntos_agujero_geometry FOREIGN KEY (idusuario) REFERENCES usuario(idusuario);
+
+
+--
+-- TOC entry 1943 (class 2606 OID 440960)
+-- Dependencies: 162 1933 161 1951
+-- Name: fk_puntos_delincuencia_geometry; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY puntos_delincuencia
+    ADD CONSTRAINT fk_puntos_delincuencia_geometry FOREIGN KEY (idusuario) REFERENCES usuario(idusuario);
+
+
+--
+-- TOC entry 1945 (class 2606 OID 440990)
+-- Dependencies: 161 1933 164 1951
+-- Name: fk_puntos_desecho_geometry; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY puntos_desecho
+    ADD CONSTRAINT fk_puntos_desecho_geometry FOREIGN KEY (idusuario) REFERENCES usuario(idusuario);
+
+
+--
+-- TOC entry 1956 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2013-06-29 19:09:39 PET
+
+--
+-- PostgreSQL database dump complete
+--
+
